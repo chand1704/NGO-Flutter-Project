@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "485491134296",
+    "project_id": "ngo-project-528c6",
+    "storage_bucket": "ngo-project-528c6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485491134296:android:a57534bde29199403d9f2d",
+        "android_client_info": {
+          "package_name": "com.example.ngo_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "485491134296-t56t7mftjiu1gjj99t6p7b5limo3opnq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ngo_project",
+            "certificate_hash": "401f7151b07f6866d2cefbd042f50914b3005d51"
+          }
+        },
+        {
+          "client_id": "485491134296-ttha051gk5l1lisoh4o8m03f6uu066ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6D50btHyLKj8NlaQrgq8knkxeoBuxqIM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "485491134296-ttha051gk5l1lisoh4o8m03f6uu066ta.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
