@@ -8,13 +8,11 @@ import 'donation_receipt_page.dart';
 
 class MyDonationPage extends StatelessWidget {
   MyDonationPage({super.key});
-
   final userId = FirebaseAuth.instance.currentUser!.uid;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFBFBFC), // Premium off-white
+      backgroundColor: const Color(0xFFFBFBFC),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('donations')
@@ -29,23 +27,18 @@ class MyDonationPage extends StatelessWidget {
               child: CircularProgressIndicator(color: Colors.green),
             );
           }
-
           final docs = snapshot.data?.docs ?? [];
-
-          // Calculate Total Impact locally for the header
           double totalImpact = 0;
           for (var doc in docs) {
             totalImpact += (doc['amount_inr'] ?? 0).toDouble();
           }
-
           return CustomScrollView(
-            physics: const BouncingScrollPhysics(), // Organic scrolling feel
+            physics: const BouncingScrollPhysics(),
             slivers: [
               // 1. DYNAMIC IMPACT HEADER
               SliverToBoxAdapter(
                 child: _buildImpactHeader(totalImpact, docs.length),
               ),
-
               // 2. TRANSACTION LIST
               SliverPadding(
                 padding: const EdgeInsets.symmetric(
@@ -196,7 +189,7 @@ class MyDonationPage extends StatelessWidget {
           ],
         ),
         onTap: () {
-          HapticFeedback.lightImpact(); // Professional tactile feedback
+          HapticFeedback.lightImpact();
           Navigator.push(
             context,
             MaterialPageRoute(
