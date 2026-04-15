@@ -12,13 +12,11 @@ import '../Model/donation_model.dart';
 
 class DonationReceiptPage extends StatelessWidget {
   final DonationModel donation;
-
   const DonationReceiptPage({super.key, required this.donation});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFBFBFC), // Premium off-white
+      backgroundColor: const Color(0xFFFBFBFC),
       appBar: AppBar(
         title: const Text(
           'Transaction Detail',
@@ -60,7 +58,6 @@ class DonationReceiptPage extends StatelessWidget {
               style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
             ),
             const SizedBox(height: 30),
-
             // 2. THE TICKET CARD
             Container(
               decoration: BoxDecoration(
@@ -116,7 +113,6 @@ class DonationReceiptPage extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   // Receipt Body
                   Padding(
                     padding: const EdgeInsets.all(24),
@@ -157,14 +153,11 @@ class DonationReceiptPage extends StatelessWidget {
                       ],
                     ),
                   ),
-
-                  // Bottom Dotted Section
                   _buildDottedBottom(),
                 ],
               ),
             ),
             const SizedBox(height: 40),
-
             // 3. ACTION BUTTONS
             _buildDownloadButton(context),
             const SizedBox(height: 100),
@@ -232,7 +225,7 @@ class DonationReceiptPage extends StatelessWidget {
       height: 60,
       child: ElevatedButton.icon(
         onPressed: () {
-          HapticFeedback.mediumImpact(); // Tactile feedback
+          HapticFeedback.mediumImpact();
           _generateAndDownloadPdf(context);
         },
         icon: const Icon(Icons.file_download_outlined),
@@ -252,10 +245,8 @@ class DonationReceiptPage extends StatelessWidget {
     );
   }
 
-  // class _generateAndDownloadPdf {}
   Future<void> _generateAndDownloadPdf(BuildContext context) async {
     final pdf = pw.Document();
-
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
@@ -291,8 +282,6 @@ class DonationReceiptPage extends StatelessWidget {
         },
       ),
     );
-
-    // This opens the native print/save dialog which is more "Real World" attractive
     await Printing.layoutPdf(
       onLayout: (PdfPageFormat format) async => pdf.save(),
       name: 'Donation_Receipt_${donation.title}.pdf',
@@ -300,8 +289,7 @@ class DonationReceiptPage extends StatelessWidget {
   }
 
   Future<void> _shareReceipt() async {
-    HapticFeedback.mediumImpact(); // High-end tactile feel
-
+    HapticFeedback.mediumImpact();
     try {
       // 1. Generate the PDF bytes (reusing your existing PDF logic)
       final pdf = pw.Document();
@@ -314,12 +302,10 @@ class DonationReceiptPage extends StatelessWidget {
           ),
         ),
       );
-
       // 2. Save to temporary storage
       final output = await getTemporaryDirectory();
       final file = File("${output.path}/Receipt_${donation.title}.pdf");
       await file.writeAsBytes(await pdf.save());
-
       // 3. Share the file
       final result = await Share.shareXFiles([
         XFile(file.path),

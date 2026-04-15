@@ -7,15 +7,12 @@ import 'donation_receipt_page.dart';
 
 class DonationHistoryPage extends StatelessWidget {
   const DonationHistoryPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-
     if (user == null) {
       return const Scaffold(body: Center(child: Text('User not logged in')));
     }
-
     return Scaffold(
       appBar: AppBar(title: const Text('My Donations')),
       body: StreamBuilder<QuerySnapshot>(
@@ -28,20 +25,16 @@ class DonationHistoryPage extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(child: Text('No donations yet'));
           }
-
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               final doc = snapshot.data!.docs[index];
-
               final donation = DonationModel.fromJson(
                 doc.data() as Map<String, dynamic>,
               );
-
               return Card(
                 margin: const EdgeInsets.all(10),
                 child: ListTile(

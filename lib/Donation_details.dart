@@ -8,7 +8,7 @@ import 'donate_payment_page.dart';
 
 class DonationDetailsPage extends StatelessWidget {
   final String categoryName;
-  final String? categoryImage; // The Base64 image from Firestore
+  final String? categoryImage;
   final List<DonationItem> details;
 
   const DonationDetailsPage({
@@ -25,19 +25,14 @@ class DonationDetailsPage extends StatelessWidget {
             "Mota Varachha, Surat Center";
       case "Tree":
         return " Green Belt Area (NH-48) & Sarthana Park";
-
       case "Education":
         return " Helping Hands Primary Wing & Katargam School";
-
       case "Medical":
         return " Community Health Camp (Surat) & Adajan Clinic";
-
       case "Food":
         return " NGO Kitchen (Varachha) & Puna Area Distribution";
-
       case "Cow Shelter":
         return " Goshala (Kamrej) & Bhestan Shelter";
-
       default:
         return " All Active NGO Branches in Gujarat";
     }
@@ -46,7 +41,6 @@ class DonationDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String targetArea = _getStaticArea(categoryName);
-
     return Scaffold(
       backgroundColor: const Color(0xFFFBFBFC),
       body: CustomScrollView(
@@ -88,7 +82,6 @@ class DonationDetailsPage extends StatelessWidget {
               ),
             ),
           ),
-
           // 2. TIER SELECTION SECTION
           SliverToBoxAdapter(
             child: Padding(
@@ -136,7 +129,6 @@ class DonationDetailsPage extends StatelessWidget {
               ),
             ),
           ),
-
           // 3. DONATION ITEMS
           SliverPadding(
             padding: const EdgeInsets.all(20),
@@ -205,7 +197,7 @@ class DonationDetailsPage extends StatelessWidget {
         ),
         trailing: const Icon(Icons.arrow_forward_rounded, color: Colors.green),
         onTap: () {
-          HapticFeedback.lightImpact(); // Professional haptic feel
+          HapticFeedback.lightImpact();
           Navigator.push(
             context,
             MaterialPageRoute(
