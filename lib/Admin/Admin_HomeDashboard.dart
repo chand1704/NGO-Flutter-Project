@@ -4,8 +4,6 @@ import 'package:intl/intl.dart';
 
 class AdminHomeScreen extends StatelessWidget {
   const AdminHomeScreen({super.key});
-
-  // --- MASK USER EMAIL/NAME ---
   String maskUserName(String input) {
     if (input == "Anonymous" || !input.contains('@')) return input;
     final parts = input.split('@');
@@ -14,7 +12,6 @@ class AdminHomeScreen extends StatelessWidget {
     return "${name[0]}***${name[name.length - 1]}@${parts[1]}";
   }
 
-  // --- LOGIC STREAMS ---
   Stream<double> _getReceivedFunds() {
     return FirebaseFirestore.instance.collection('donations').snapshots().map((
       snapshot,
@@ -39,25 +36,19 @@ class AdminHomeScreen extends StatelessWidget {
       symbol: '₹',
       decimalDigits: 0,
     );
-
     return Scaffold(
-      backgroundColor: const Color(
-        0xFFF4F7FA,
-      ), // Modern subtle blue-grey background
+      backgroundColor: const Color(0xFFF4F7FA),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
           // 1. WELCOME HEADER
-          // _buildSliverHeader(),
           SliverPadding(
             padding: const EdgeInsets.all(16.0),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 // 2. STATS GRID (Dynamic & Elevated)
                 _buildStatsGrid(),
-
                 const SizedBox(height: 30),
-
                 // 3. RECENT ACTIVITY HEADER
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -74,7 +65,6 @@ class AdminHomeScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-
                 // 4. RECENT DONATIONS LIST
                 _buildRecentDonationsList(currencyFormat),
                 const SizedBox(height: 40),
@@ -177,35 +167,28 @@ class AdminHomeScreen extends StatelessWidget {
     IconData icon,
     Color color, {
     bool isVolunteer = false,
-    bool isEvent = false, // 🔥 Add a new flag for Events
+    bool isEvent = false,
   }) {
     Query query = FirebaseFirestore.instance.collection(collection);
-
     // 1. Filter for Approved Volunteers
     if (isVolunteer) {
       query = query.where('status', isEqualTo: 'approved');
     }
-
     // 2. 🔥 Filter for ACTIVE Events (Today or Future)
     if (isEvent) {
-      // We get today's date at 00:00:00 to ensure events happening today are shown
       DateTime now = DateTime.now();
       DateTime todayStart = DateTime(now.year, now.month, now.day);
-
       query = query.where(
         'event_date_timestamp',
         isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart),
       );
     }
-
     return StreamBuilder<QuerySnapshot>(
       stream: query.snapshots(),
       builder: (context, snapshot) {
-        // Show "0" if data is loaded but empty, otherwise show "..."
         String count = snapshot.hasData
             ? snapshot.data!.docs.length.toString()
             : "...";
-
         return _modernStatUI(title, count, icon, color);
       },
     );
@@ -221,7 +204,6 @@ class AdminHomeScreen extends StatelessWidget {
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return const Center(child: CircularProgressIndicator());
-
         return ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -239,7 +221,6 @@ class AdminHomeScreen extends StatelessWidget {
                   ),
                 ) ??
                 0;
-
             return Container(
               margin: const EdgeInsets.only(bottom: 12),
               padding: const EdgeInsets.all(12),
