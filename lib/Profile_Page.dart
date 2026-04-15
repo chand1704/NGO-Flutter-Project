@@ -9,7 +9,6 @@ import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
-
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
@@ -17,8 +16,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _nameController = TextEditingController();
   bool _isUpdating = false;
-
-  // ===================== PICK & UPLOAD IMAGE =====================
   Future<void> _pickAndUploadImage() async {
     if (_isUpdating) return;
     final ImagePicker picker = ImagePicker();
@@ -28,7 +25,6 @@ class _ProfilePageState extends State<ProfilePage> {
         imageQuality: 40,
       );
       if (image == null) return;
-
       HapticFeedback.mediumImpact();
       setState(() => _isUpdating = true);
       final String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -49,19 +45,15 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  // ===================== UPDATE NAME =====================
   Future<void> _updateUserData() async {
     if (_isUpdating) return;
     final String? uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
-
     setState(() => _isUpdating = true);
-
     try {
       await FirebaseFirestore.instance.collection('users').doc(uid).update({
         'name': _nameController.text.trim(),
       });
-
       if (mounted) {
         FocusScope.of(context).unfocus();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -73,14 +65,11 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  // ===================== UI =====================
   @override
   Widget build(BuildContext context) {
     String? uid = FirebaseAuth.instance.currentUser?.uid;
-
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-
       body: uid == null
           ? const Center(child: Text("Please login to continue"))
           : StreamBuilder<DocumentSnapshot>(
@@ -102,12 +91,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 if (_nameController.text.isEmpty) {
                   _nameController.text = data['name'] ?? "";
                 }
-
                 return SingleChildScrollView(
                   child: Column(
                     children: [
                       const SizedBox(height: 20),
-
                       _buildProfileImageSection(profileImage),
                       const SizedBox(height: 15),
                       Text(
@@ -117,7 +104,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
                       // Display Role as a Badge
                       Container(
                         padding: const EdgeInsets.symmetric(
@@ -137,7 +123,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 30),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -152,23 +137,18 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             const SizedBox(height: 15),
-
                             _buildPremiumField(
                               controller: _nameController,
                               label: "Display Name",
                               icon: Icons.person_outline,
                             ),
                             const SizedBox(height: 15),
-                            // READ-ONLY FIELD: Email
                             _buildReadOnlyField(
                               label: "Email Address",
                               value: email,
                               icon: Icons.email_outlined,
                             ),
-
                             const SizedBox(height: 15),
-
-                            // READ-ONLY FIELD: Role
                             _buildReadOnlyField(
                               label: "Account Role",
                               value: role,
@@ -188,7 +168,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  // --- NEW: Read Only Field Widget ---
   Widget _buildReadOnlyField({
     required String label,
     required String value,
@@ -223,11 +202,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ),
           const Spacer(),
-          const Icon(
-            Icons.lock_outline,
-            size: 18,
-            color: Colors.grey,
-          ), // Visual cue that it's locked
+          const Icon(Icons.lock_outline, size: 18, color: Colors.grey),
         ],
       ),
     );
@@ -252,11 +227,9 @@ class _ProfilePageState extends State<ProfilePage> {
             child: CircleAvatar(
               radius: 70,
               backgroundColor: Colors.grey.shade200,
-              // Check if base64String is valid and not empty
               backgroundImage: (base64String != null && base64String.isNotEmpty)
                   ? MemoryImage(base64Decode(base64String))
                   : null,
-              // Show person icon only if no image is present
               child: (base64String == null || base64String.isEmpty)
                   ? Icon(Icons.person, size: 70, color: Colors.grey.shade400)
                   : null,
@@ -271,7 +244,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 42,
                 width: 42,
                 decoration: BoxDecoration(
-                  color: Colors.green.shade600, // Change color here
+                  color: Colors.green.shade600,
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 3),
                 ),
