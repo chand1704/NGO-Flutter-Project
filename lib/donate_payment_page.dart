@@ -9,9 +9,13 @@ import 'package:ngo_project/service/donation_service.dart';
 
 class DonatePaymentPage extends StatefulWidget {
   final DonationItem item;
+  final String targetArea;
 
-  const DonatePaymentPage({super.key, required this.item});
-
+  const DonatePaymentPage({
+    super.key,
+    required this.item,
+    required this.targetArea,
+  });
   @override
   State<DonatePaymentPage> createState() => _DonatePaymentPageState();
 }

@@ -18,8 +18,35 @@ class DonationDetailsPage extends StatelessWidget {
     required this.details,
   });
 
+  String _getStaticArea(String category) {
+    switch (category) {
+      case "Old Age":
+        return " Pasodara Center & "
+            "Mota Varachha, Surat Center";
+      case "Tree":
+        return " Green Belt Area (NH-48) & Sarthana Park";
+
+      case "Education":
+        return " Helping Hands Primary Wing & Katargam School";
+
+      case "Medical":
+        return " Community Health Camp (Surat) & Adajan Clinic";
+
+      case "Food":
+        return " NGO Kitchen (Varachha) & Puna Area Distribution";
+
+      case "Cow Shelter":
+        return " Goshala (Kamrej) & Bhestan Shelter";
+
+      default:
+        return " All Active NGO Branches in Gujarat";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final String targetArea = _getStaticArea(categoryName);
+
     return Scaffold(
       backgroundColor: const Color(0xFFFBFBFC),
       body: CustomScrollView(
@@ -74,6 +101,33 @@ class DonationDetailsPage extends StatelessWidget {
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
                   ),
                   const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        size: 16,
+                        color: Colors.green,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        "Beneficiary Area:",
+                        style: TextStyle(
+                          color: Colors.grey.shade800,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Text(
+                        targetArea,
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
                   Text(
                     "Select a donation tier below to support $categoryName.",
                     style: TextStyle(color: Colors.grey.shade600),
@@ -88,7 +142,8 @@ class DonationDetailsPage extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) => _buildTierCard(context, details[index]),
+                (context, index) =>
+                    _buildTierCard(context, details[index], targetArea),
                 childCount: details.length,
               ),
             ),
@@ -114,7 +169,7 @@ class DonationDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTierCard(BuildContext context, DonationItem item) {
+  Widget _buildTierCard(BuildContext context, DonationItem item, String area) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -154,7 +209,8 @@ class DonationDetailsPage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => DonatePaymentPage(item: item),
+              builder: (context) =>
+                  DonatePaymentPage(item: item, targetArea: area),
             ),
           );
         },
