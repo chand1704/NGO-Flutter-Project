@@ -8,18 +8,13 @@ class Signupcontroller extends GetxController {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final AuthService _authService = AuthService();
-
   var isLoading = false.obs;
-
   var isPasswordVisible = false.obs;
   var isConfirmPasswordVisible = false.obs;
-
   var selectedRole = 'User'.obs;
   final List<String> roles = ['User', 'Volunteer'];
-
   void setSelectedRole(String? value) {
     if (value != null) {
       selectedRole.value = value;
@@ -38,17 +33,14 @@ class Signupcontroller extends GetxController {
   Future<void> signup() async {
     try {
       isLoading.value = true;
-
       final User? user = await _authService.createUserWithEmailAndPassword(
         emailController.text.trim(),
         passwordController.text.trim(),
       );
-
       if (user == null) {
         Get.snackbar("Error", "Signup failed");
         return;
       }
-
       await _firestore.collection('users').doc(user.uid).set({
         'uid': user.uid,
         'name': nameController.text.trim(),
@@ -58,7 +50,6 @@ class Signupcontroller extends GetxController {
         'provider': 'email',
         'createdAt': FieldValue.serverTimestamp(),
       });
-
       Get.offAllNamed('/home');
     } catch (e) {
       Get.snackbar("Signup Error", e.toString());
@@ -71,21 +62,17 @@ class Signupcontroller extends GetxController {
   Future<void> googleSignup() async {
     try {
       isLoading.value = true;
-
       final User? user = await _authService.loginWithGoogle();
       if (user == null) return;
-
       await _firestore.collection('users').doc(user.uid).set({
         'uid': user.uid,
         'name': user.displayName ?? 'Helping Hands User',
         'email': user.email,
-        // 'role': 'User',
         'role': selectedRole.value,
         'profileImage': user.photoURL,
         'provider': 'google',
         'createdAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
-
       Get.offAllNamed('/home');
     } catch (e) {
       Get.snackbar("Google Signup Error", e.toString());

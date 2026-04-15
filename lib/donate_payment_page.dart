@@ -10,7 +10,6 @@ import 'package:ngo_project/service/donation_service.dart';
 class DonatePaymentPage extends StatefulWidget {
   final DonationItem item;
   final String targetArea;
-
   const DonatePaymentPage({
     super.key,
     required this.item,
@@ -23,30 +22,18 @@ class DonatePaymentPage extends StatefulWidget {
 class _DonatePaymentPageState extends State<DonatePaymentPage> {
   late double currentAmount;
   late TextEditingController amountController;
-
   final DonationService _donationService = DonationService();
-
-  /// INR → USD conversion
   final double inrToUsdRate = 83.0;
-
   @override
   void initState() {
     super.initState();
     currentAmount =
         double.tryParse(widget.item.amount.replaceAll(RegExp(r'[^0-9]'), '')) ??
         500;
-
     amountController = TextEditingController(
       text: currentAmount.toStringAsFixed(0),
     );
   }
-
-  // void _increaseAmount() {
-  //   setState(() {
-  //     currentAmount += 100;
-  //     amountController.text = currentAmount.toStringAsFixed(0);
-  //   });
-  // }
 
   void _updateAmount(double value) {
     setState(() {
@@ -55,20 +42,10 @@ class _DonatePaymentPageState extends State<DonatePaymentPage> {
     });
   }
 
-  // void _decreaseAmount() {
-  //   if (currentAmount > 500) {
-  //     setState(() {
-  //       currentAmount -= 100;
-  //       amountController.text = currentAmount.toStringAsFixed(0);
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     final double usdAmount = currentAmount / inrToUsdRate;
     final String usdAmountStr = usdAmount.toStringAsFixed(2);
-
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
@@ -83,7 +60,6 @@ class _DonatePaymentPageState extends State<DonatePaymentPage> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Icon(Icons.volunteer_activism, size: 80, color: Colors.green),
             const SizedBox(height: 16),
@@ -93,14 +69,12 @@ class _DonatePaymentPageState extends State<DonatePaymentPage> {
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-
             const Text(
               "Every contribution helps us reach our goal.",
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.grey, fontSize: 16),
             ),
             const SizedBox(height: 30),
-
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
@@ -181,7 +155,6 @@ class _DonatePaymentPageState extends State<DonatePaymentPage> {
                 ],
               ),
             ),
-
             const SizedBox(height: 30),
             Text(
               "Approx. \$${usdAmountStr} USD",
@@ -191,14 +164,12 @@ class _DonatePaymentPageState extends State<DonatePaymentPage> {
               ),
             ),
             const SizedBox(height: 30),
-
             const SizedBox(height: 30),
             Text(
               "You will pay approximately \$${usdAmountStr} USD",
               style: const TextStyle(color: Colors.grey),
             ),
             const SizedBox(height: 20),
-
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
@@ -248,15 +219,12 @@ class _DonatePaymentPageState extends State<DonatePaymentPage> {
                           amountUsd: usdAmount,
                           paypalResponse: params,
                         );
-
                         if (!mounted) return;
-
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text("Donation Successful ❤️"),
                           ),
                         );
-
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (_) => HomePage()),

@@ -5,10 +5,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-
   User? get currentUser => _auth.currentUser;
   Stream<User?> get authStateChanges => _auth.authStateChanges();
-
   // ================= EMAIL SIGNUP =================
   Future<User?> createUserWithEmailAndPassword(
     String email,
@@ -48,13 +46,11 @@ class AuthService {
     try {
       final googleUser = await _googleSignIn.signIn();
       if (googleUser == null) return null;
-
       final googleAuth = await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-
       final userCred = await _auth.signInWithCredential(credential);
       return userCred.user;
     } catch (e) {
@@ -65,10 +61,7 @@ class AuthService {
 
   // ================= LOGOUT =================
   Future<void> signOut() async {
-    // await _googleSignIn.signOut();
-    // await _auth.signOut();
     try {
-      // Use disconnect() to force the user to select an account next time
       if (await _googleSignIn.isSignedIn()) {
         await _googleSignIn.disconnect();
       }

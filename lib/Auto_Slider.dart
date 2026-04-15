@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 class AutoSlider extends StatefulWidget {
   const AutoSlider({super.key});
-
   @override
   _AutoSliderState createState() => _AutoSliderState();
 }
@@ -13,20 +12,16 @@ class _AutoSliderState extends State<AutoSlider> {
   late final PageController _controller;
   Timer? _timer;
   int _currentPage = 0;
-
   final List<String> images = [
     'assets/images/slider1.jpg',
     'assets/images/slidertree1.jpeg',
     'assets/images/slider2.jpeg',
     'assets/images/slidertree2.jpeg',
   ];
-
   @override
   void initState() {
     super.initState();
-    // 1. viewportFraction makes the side images slightly visible
     _controller = PageController(viewportFraction: 0.9);
-
     _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
       if (_controller.hasClients) {
         _currentPage = (_currentPage + 1) % images.length;
@@ -51,7 +46,7 @@ class _AutoSliderState extends State<AutoSlider> {
     return Column(
       children: [
         SizedBox(
-          height: 220, // Slightly more compact
+          height: 220,
           child: PageView.builder(
             controller: _controller,
             itemCount: images.length,
@@ -60,7 +55,6 @@ class _AutoSliderState extends State<AutoSlider> {
               return AnimatedBuilder(
                 animation: _controller,
                 builder: (context, child) {
-                  // 2. Subtle scaling effect for the active page
                   double value = 1.0;
                   if (_controller.position.haveDimensions) {
                     value = _controller.page! - index;
@@ -81,7 +75,6 @@ class _AutoSliderState extends State<AutoSlider> {
           ),
         ),
         const SizedBox(height: 12),
-        // 3. Dynamic Animated Indicators
         _buildIndicators(),
       ],
     );
@@ -106,7 +99,6 @@ class _AutoSliderState extends State<AutoSlider> {
           fit: StackFit.expand,
           children: [
             Image.asset(imagePath, fit: BoxFit.cover),
-            // 4. Subtle Gradient Overlay for depth
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -134,7 +126,7 @@ class _AutoSliderState extends State<AutoSlider> {
           duration: const Duration(milliseconds: 300),
           margin: const EdgeInsets.symmetric(horizontal: 4),
           height: 8,
-          width: isActive ? 24 : 8, // Grows when active
+          width: isActive ? 24 : 8,
           decoration: BoxDecoration(
             color: isActive ? Colors.indigo : Colors.grey.shade300,
             borderRadius: BorderRadius.circular(10),

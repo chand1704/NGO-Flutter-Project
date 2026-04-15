@@ -2,7 +2,6 @@ import 'dart:convert';
 
 DonationModel donationModelFromJson(String str) =>
     DonationModel.fromJson(json.decode(str));
-
 String donationModelToJson(DonationModel data) => json.encode(data.toJson());
 
 class DonationModel {
@@ -13,9 +12,7 @@ class DonationModel {
   final String userId;
   final String userEmail;
   final DateTime createdAt;
-
   final PaypalResponse paypalResponse;
-
   DonationModel({
     required this.title,
     required this.status,
@@ -26,7 +23,6 @@ class DonationModel {
     required this.createdAt,
     required this.paypalResponse,
   });
-
   factory DonationModel.fromJson(Map<String, dynamic> json) {
     return DonationModel(
       title: json['title'] ?? '',
@@ -41,7 +37,6 @@ class DonationModel {
       paypalResponse: PaypalResponse.fromJson(json['paypal_response'] ?? {}),
     );
   }
-
   Map<String, dynamic> toJson() => {
     'title': title,
     'status': status,
@@ -57,7 +52,6 @@ class DonationModel {
 /* -------------------------------------------------------------------------- */
 /*                              PAYPAL RESPONSE                               */
 /* -------------------------------------------------------------------------- */
-
 class PaypalResponse {
   final String id;
   final String intent;
@@ -68,7 +62,6 @@ class PaypalResponse {
   final Payer payer;
   final List<Link> links;
   final List<dynamic> failedTransactions;
-
   PaypalResponse({
     required this.id,
     required this.intent,
@@ -80,10 +73,8 @@ class PaypalResponse {
     required this.links,
     required this.failedTransactions,
   });
-
   factory PaypalResponse.fromJson(Map<String, dynamic> json) {
-    final data = json['data'] ?? json; // 🔥 FIX
-
+    final data = json['data'] ?? json;
     return PaypalResponse(
       id: data['id'] ?? '',
       intent: data['intent'] ?? '',
@@ -102,7 +93,6 @@ class PaypalResponse {
       failedTransactions: data['failed_transactions'] ?? [],
     );
   }
-
   Map<String, dynamic> toJson() => {
     'id': id,
     'intent': intent,
@@ -119,18 +109,15 @@ class PaypalResponse {
 /* -------------------------------------------------------------------------- */
 /*                                   PAYER                                    */
 /* -------------------------------------------------------------------------- */
-
 class Payer {
   final String paymentMethod;
   final String status;
   final PayerInfo payerInfo;
-
   Payer({
     required this.paymentMethod,
     required this.status,
     required this.payerInfo,
   });
-
   factory Payer.fromJson(Map<String, dynamic> json) {
     return Payer(
       paymentMethod: json['payment_method'] ?? '',
@@ -138,7 +125,6 @@ class Payer {
       payerInfo: PayerInfo.fromJson(json['payer_info'] ?? {}),
     );
   }
-
   Map<String, dynamic> toJson() => {
     'payment_method': paymentMethod,
     'status': status,
@@ -149,14 +135,12 @@ class Payer {
 /* -------------------------------------------------------------------------- */
 /*                                PAYER INFO                                  */
 /* -------------------------------------------------------------------------- */
-
 class PayerInfo {
   final String payerId;
   final String firstName;
   final String lastName;
   final String email;
   final String countryCode;
-
   PayerInfo({
     required this.payerId,
     required this.firstName,
@@ -164,7 +148,6 @@ class PayerInfo {
     required this.email,
     required this.countryCode,
   });
-
   factory PayerInfo.fromJson(Map<String, dynamic> json) {
     return PayerInfo(
       payerId: json['payer_id'] ?? '',
@@ -174,7 +157,6 @@ class PayerInfo {
       countryCode: json['country_code'] ?? '',
     );
   }
-
   Map<String, dynamic> toJson() => {
     'payer_id': payerId,
     'first_name': firstName,
@@ -187,14 +169,11 @@ class PayerInfo {
 /* -------------------------------------------------------------------------- */
 /*                                   LINKS                                    */
 /* -------------------------------------------------------------------------- */
-
 class Link {
   final String rel;
   final String method;
   final String href;
-
   Link({required this.rel, required this.method, required this.href});
-
   factory Link.fromJson(Map<String, dynamic> json) {
     return Link(
       rel: json['rel'] ?? '',
@@ -202,6 +181,5 @@ class Link {
       href: json['href'] ?? '',
     );
   }
-
   Map<String, dynamic> toJson() => {'rel': rel, 'method': method, 'href': href};
 }

@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 class CategoryModel {
   final String id;
   final String title;
-  final String? base64Image; // Store the raw string from Firestore
+  final String? base64Image;
   final IconData icon;
   final String fallbackImage;
   final List<dynamic> items;
-
   CategoryModel({
     required this.id,
     required this.title,
@@ -16,21 +15,17 @@ class CategoryModel {
     required this.fallbackImage,
     this.items = const [],
   });
-
-  // Factory to create a Category from Firestore data safely
   factory CategoryModel.fromFirestore(Map<String, dynamic> data, String docId) {
     final meta = _getLocalMetadata(docId);
     return CategoryModel(
       id: docId,
       title: data['category_name'] ?? 'Unnamed Category',
       base64Image: data['image'], // Matches your Firestore field
-      items: data['items'] as List? ?? [], // Safe null check
+      items: data['items'] as List? ?? [],
       icon: meta['icon'],
       fallbackImage: meta['imagePath'],
     );
   }
-
-  // Local lookup to keep your UI consistent with icons and fallback images
   static Map<String, dynamic> _getLocalMetadata(String id) {
     final Map<String, Map<String, dynamic>> metaMap = {
       "old_age": {

@@ -10,11 +10,10 @@ import 'Model/Donation_Item.dart';
 
 class DonatePage extends StatelessWidget {
   const DonatePage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFBFBFC), // Premium off-white
+      backgroundColor: const Color(0xFFFBFBFC),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('donation_categories')
@@ -27,16 +26,9 @@ class DonatePage extends StatelessWidget {
               child: CircularProgressIndicator(color: Colors.green),
             );
           }
-
           final docs = snapshot.data!.docs;
-
           return ListView.builder(
-            padding: const EdgeInsets.fromLTRB(
-              16,
-              20,
-              16,
-              100,
-            ), // Bottom padding for floating bar
+            padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
             itemCount: docs.length,
             itemBuilder: (context, index) {
               final data = docs[index].data() as Map<String, dynamic>;
@@ -48,7 +40,6 @@ class DonatePage extends StatelessWidget {
                         DonationItem.fromMap(item as Map<String, dynamic>),
                   )
                   .toList();
-
               return _buildPremiumMissionCard(context, category, details);
             },
           );
@@ -103,7 +94,6 @@ class DonatePage extends StatelessWidget {
                   ),
                 ),
               ),
-
               // 3. Mission Details Content
               Positioned(
                 bottom: 20,
@@ -112,7 +102,6 @@ class DonatePage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Glassmorphic Category Tag
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: BackdropFilter(
