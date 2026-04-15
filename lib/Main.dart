@@ -47,7 +47,6 @@ class MyApp extends StatelessWidget {
         '/home': (context) => Root(),
         '/profile': (context) => ProfilePage(),
         '/donate': (context) => DonatePage(),
-        // home: const MyHomePage(),
       },
     );
   }
