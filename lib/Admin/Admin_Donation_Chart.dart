@@ -5,8 +5,6 @@ import 'package:intl/intl.dart';
 
 class AdminDonationChart extends StatelessWidget {
   const AdminDonationChart({super.key});
-
-  // --- PRIVACY MASKING ---
   String maskUserName(String name) {
     if (name.isEmpty || name == "Anonymous") return "Anonymous";
     if (name.contains('@')) {
@@ -27,9 +25,8 @@ class AdminDonationChart extends StatelessWidget {
       decimalDigits: 0,
     );
     int currentYear = DateTime.now().year;
-
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA), // Professional soft grey
+      backgroundColor: const Color(0xFFF8F9FA),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('donations')
@@ -41,22 +38,18 @@ class AdminDonationChart extends StatelessWidget {
               child: CircularProgressIndicator(color: Colors.green),
             );
           }
-
           if (snapshot.hasError)
             return const Center(child: Text("Error syncing data"));
-
           Map<int, double> monthlyTotals = {
             for (var i = 0; i < 12; i++) i: 0.0,
           };
           double totalSum = 0;
           double maxMonthVal = 1000;
           List<DocumentSnapshot> donationDocs = snapshot.data?.docs ?? [];
-
           for (var doc in donationDocs) {
             var data = doc.data() as Map<String, dynamic>;
             double amount = (data['amount_inr'] ?? 0).toDouble();
             Timestamp? ts = data['created_at'] as Timestamp?;
-
             if (ts != null) {
               DateTime date = ts.toDate();
               if (date.year == currentYear) {
@@ -68,7 +61,6 @@ class AdminDonationChart extends StatelessWidget {
               totalSum += amount;
             }
           }
-
           return CustomScrollView(
             physics: const BouncingScrollPhysics(),
             slivers: [
@@ -80,12 +72,10 @@ class AdminDonationChart extends StatelessWidget {
                   currentYear,
                 ),
               ),
-
               // 2. ANALYTICAL TREND CHART
               SliverToBoxAdapter(
                 child: _buildTrendChart(monthlyTotals, maxMonthVal),
               ),
-
               // 3. RECENT TRANSACTIONS LABEL
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
@@ -106,7 +96,6 @@ class AdminDonationChart extends StatelessWidget {
                   ),
                 ),
               ),
-
               // 4. TRANSACTION LIST
               SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
@@ -122,7 +111,6 @@ class AdminDonationChart extends StatelessWidget {
     );
   }
 
-  // --- COMPONENT: REVENUE HEADER ---
   Widget _buildRevenueHeader(double total, NumberFormat format, int year) {
     return Container(
       padding: const EdgeInsets.fromLTRB(25, 40, 25, 40),
@@ -218,7 +206,6 @@ class AdminDonationChart extends StatelessWidget {
     );
   }
 
-  // --- COMPONENT: GRADIENT TREND CHART ---
   Widget _buildTrendChart(Map<int, double> totals, double max) {
     return Container(
       margin: const EdgeInsets.all(20),
@@ -315,7 +302,6 @@ class AdminDonationChart extends StatelessWidget {
     );
   }
 
-  // --- COMPONENT: MODERN TRANSACTION TILE ---
   Widget _buildModernTransactionTile(
     Map<String, dynamic> data,
     NumberFormat format,
@@ -327,7 +313,6 @@ class AdminDonationChart extends StatelessWidget {
         ? DateFormat('dd MMM').format(ts.toDate())
         : "Recent";
     String title = data['title'] ?? "General Donation";
-
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       padding: const EdgeInsets.all(15),
