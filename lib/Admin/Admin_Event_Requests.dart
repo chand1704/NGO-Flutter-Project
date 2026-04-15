@@ -5,14 +5,11 @@ import 'package:get/get.dart';
 class AdminEventRequests extends StatelessWidget {
   final String eventId;
   final String eventTitle;
-
   const AdminEventRequests({
     super.key,
     required this.eventId,
     required this.eventTitle,
   });
-
-  // --- LOGIC: STATUS UPDATE ---
   Future<void> _updateStatus(String volunteerId, String status) async {
     String customDocId = "${eventId}_$volunteerId";
     try {
@@ -48,7 +45,7 @@ class AdminEventRequests extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F7F6), // Modern soft background
+      backgroundColor: const Color(0xFFF4F7F6),
       appBar: AppBar(
         title: Text(
           eventTitle,
@@ -70,13 +67,11 @@ class AdminEventRequests extends StatelessWidget {
               child: CircularProgressIndicator(color: Colors.green),
             );
           }
-
           final requests = snapshot.data?.docs ?? [];
           int approved = requests
               .where((d) => d['status'] == 'approved')
               .length;
           int pending = requests.where((d) => d['status'] == 'pending').length;
-
           return CustomScrollView(
             physics: const BouncingScrollPhysics(),
             slivers: [
@@ -88,7 +83,6 @@ class AdminEventRequests extends StatelessWidget {
                   pending,
                 ),
               ),
-
               // 2. REQUESTS LIST
               requests.isEmpty
                   ? SliverFillRemaining(child: _buildEmptyState())
@@ -109,7 +103,6 @@ class AdminEventRequests extends StatelessWidget {
     );
   }
 
-  // --- UI: MANAGEMENT HEADER ---
   Widget _buildManagementHeader(int total, int approved, int pending) {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 30),
@@ -162,14 +155,12 @@ class AdminEventRequests extends StatelessWidget {
     );
   }
 
-  // --- UI: MODERN REQUEST CARD ---
   Widget _buildModernRequestCard(Map<String, dynamic> reqData) {
     String status = reqData['status'] ?? "pending";
     String vId = reqData['volunteer_id'] ?? "";
     Color statusColor = status == 'approved'
         ? Colors.green
         : (status == 'rejected' ? Colors.red : Colors.orange);
-
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
