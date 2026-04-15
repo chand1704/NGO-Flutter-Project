@@ -9,15 +9,13 @@ import 'Admin_UserDetails.dart';
 
 class UserManagementScreen extends StatefulWidget {
   const UserManagementScreen({super.key});
-
   @override
   State<UserManagementScreen> createState() => _UserManagementScreenState();
 }
 
 class _UserManagementScreenState extends State<UserManagementScreen> {
   String searchQuery = "";
-  String activeFilter = "All"; // All, admin, volunteer, user
-
+  String activeFilter = "All";
   Future<void> _updateRole(String uid, String newRole) async {
     try {
       await FirebaseFirestore.instance.collection('users').doc(uid).update({
@@ -118,13 +116,11 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
             height: 180,
             child: Center(child: CircularProgressIndicator()),
           );
-
         var docs = snapshot.data!.docs;
         int total = docs.length;
         int admin = docs.where((d) => d['role'] == 'Admin').length;
         int volunteer = docs.where((d) => d['role'] == 'Volunteer').length;
         int user = docs.where((d) => d['role'] == 'User').length;
-
         return Container(
           margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
           padding: const EdgeInsets.all(20),
@@ -291,19 +287,15 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return const Center(child: CircularProgressIndicator());
-
         final filtered = snapshot.data!.docs.where((doc) {
           String name = doc['name'].toString().toLowerCase();
           String email = doc['email'].toString().toLowerCase();
           String role = doc['role'] ?? 'user';
-
           bool matchesSearch =
               name.contains(searchQuery) || email.contains(searchQuery);
           bool matchesFilter = activeFilter == "All" || role == activeFilter;
-
           return matchesSearch && matchesFilter;
         }).toList();
-
         return ListView.builder(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
           itemCount: filtered.length,
@@ -312,7 +304,6 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
             String role = data['role'] ?? 'user';
             String name = data['name'] ?? "Unknown";
             String? profileImg = data['profileImage'];
-
             return Container(
               margin: const EdgeInsets.only(bottom: 12),
               decoration: BoxDecoration(

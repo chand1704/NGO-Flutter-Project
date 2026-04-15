@@ -263,6 +263,7 @@ class AdminHomeScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
+                    //4125
                     currencyFormat.format(amount),
                     style: const TextStyle(
                       color: Colors.green,

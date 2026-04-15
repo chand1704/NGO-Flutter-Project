@@ -6,13 +6,11 @@ import 'package:intl/intl.dart';
 class UserDetailScreen extends StatelessWidget {
   final String userName;
   final String userEmail;
-
   const UserDetailScreen({
     super.key,
     required this.userName,
     required this.userEmail,
   });
-
   @override
   Widget build(BuildContext context) {
     final NumberFormat currencyFormat = NumberFormat.currency(
@@ -20,7 +18,6 @@ class UserDetailScreen extends StatelessWidget {
       symbol: '₹',
       decimalDigits: 0,
     );
-
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
@@ -33,7 +30,6 @@ class UserDetailScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: StreamBuilder<QuerySnapshot>(
-        // 🔥 Remove .orderBy temporarily if you haven't created a Firestore Index yet
         stream: FirebaseFirestore.instance
             .collection('donations')
             .where('user_email', isEqualTo: userEmail)
@@ -42,17 +38,12 @@ class UserDetailScreen extends StatelessWidget {
           if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}"));
           }
-
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(color: Colors.green),
             );
           }
-
-          // Safely extract docs
           var docs = snapshot.data?.docs ?? [];
-
-          // Sort manually in Dart to avoid needing a Firestore Index immediately
           docs.sort((a, b) {
             var aData = a.data() as Map<String, dynamic>;
             var bData = b.data() as Map<String, dynamic>;
@@ -61,15 +52,11 @@ class UserDetailScreen extends StatelessWidget {
             if (aTs == null || bTs == null) return 0;
             return aTs.compareTo(bTs);
           });
-
           double totalContribution = 0;
           List<FlSpot> spots = [];
           double maxY = 1000;
-
           for (int i = 0; i < docs.length; i++) {
             var data = docs[i].data() as Map<String, dynamic>;
-
-            // Handle both String and Num amounts safely
             double amt = 0;
             var rawAmt = data['amount_inr'];
             if (rawAmt is num) {
@@ -79,22 +66,16 @@ class UserDetailScreen extends StatelessWidget {
                   double.tryParse(rawAmt.replaceAll(RegExp(r'[^0-9.]'), '')) ??
                   0;
             }
-
             totalContribution += amt;
             if (amt > maxY) maxY = amt;
             spots.add(FlSpot(i.toDouble(), amt));
           }
-
           return SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
-                // --- 1. PREMIUM HEADER SECTION ---
                 _buildProfileHeader(totalContribution, currencyFormat),
-
                 const SizedBox(height: 25),
-
-                // --- 2. CONTRIBUTION TREND CHART ---
                 if (spots.length > 1)
                   _buildChartSection(spots, maxY)
                 else if (docs.isNotEmpty)
@@ -105,12 +86,8 @@ class UserDetailScreen extends StatelessWidget {
                       style: TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                   ),
-
                 const SizedBox(height: 30),
-
-                // --- 3. TRANSACTION HISTORY LIST ---
                 _buildHistoryHeader(),
-
                 if (docs.isEmpty)
                   _buildEmptyState()
                 else
@@ -120,7 +97,6 @@ class UserDetailScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: docs.length,
                     itemBuilder: (context, index) {
-                      // Show newest first in the list
                       var data =
                           docs[docs.length - 1 - index].data()
                               as Map<String, dynamic>;
@@ -136,7 +112,6 @@ class UserDetailScreen extends StatelessWidget {
     );
   }
 
-  // --- HEADER: USER INFO & TOTAL ---
   Widget _buildProfileHeader(double total, NumberFormat format) {
     return Container(
       width: double.infinity,
@@ -213,7 +188,6 @@ class UserDetailScreen extends StatelessWidget {
     );
   }
 
-  // --- CHART: CONTRIBUTION TREND ---
   Widget _buildChartSection(List<FlSpot> spots, double maxY) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -257,20 +231,17 @@ class UserDetailScreen extends StatelessWidget {
     );
   }
 
-  // --- LIST ITEM: DONATION CARD ---
   Widget _buildDonationCard(Map<String, dynamic> data, NumberFormat format) {
     Timestamp? ts = data['created_at'];
     String dateStr = ts != null
         ? DateFormat('dd MMM yyyy').format(ts.toDate())
         : "Recent";
-
     double amt = 0;
     var rawAmt = data['amount_inr'];
     if (rawAmt is num)
       amt = rawAmt.toDouble();
     else if (rawAmt is String)
       amt = double.tryParse(rawAmt.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0;
-
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
