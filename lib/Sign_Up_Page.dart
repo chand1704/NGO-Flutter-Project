@@ -1,328 +1,3 @@
-// import 'package:flutter/gestures.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-//
-// import 'Controller/SignUpController.dart';
-// import 'Sign_In_Page.dart';
-//
-// class SignUpPage extends StatelessWidget {
-//   SignUpPage({super.key});
-//
-//   final formKey = GlobalKey<FormState>();
-//   final controller = Get.put(Signupcontroller());
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Stack(
-//         children: [
-//           // 1. DYNAMIC BACKGROUND GRADIENT
-//           Container(
-//             height: double.infinity,
-//             width: double.infinity,
-//             decoration: const BoxDecoration(
-//               gradient: LinearGradient(
-//                 colors: [Color(0xFF2E7D32), Color(0xFF1B5E20)],
-//                 begin: Alignment.topCenter,
-//                 end: Alignment.bottomCenter,
-//               ),
-//             ),
-//           ),
-//
-//           // 2. MAIN CONTENT
-//           SafeArea(
-//             child: Center(
-//               child: SingleChildScrollView(
-//                 padding: const EdgeInsets.symmetric(
-//                   horizontal: 24.0,
-//                   vertical: 20,
-//                 ),
-//                 child: Column(
-//                   children: [
-//                     // LOGO SECTION
-//                     Container(
-//                       height: 120,
-//                       width: 120,
-//                       padding: const EdgeInsets.all(15),
-//                       decoration: const BoxDecoration(
-//                         color: Colors.white,
-//                         shape: BoxShape.circle,
-//                         boxShadow: [
-//                           BoxShadow(color: Colors.black12, blurRadius: 15),
-//                         ],
-//                       ),
-//                       child: Image.asset(
-//                         'assets/images/ngo_logo.png',
-//                         fit: BoxFit.contain,
-//                       ),
-//                     ),
-//                     const SizedBox(height: 25),
-//
-//                     const Text(
-//                       "Create Account",
-//                       style: TextStyle(
-//                         color: Colors.white,
-//                         fontSize: 28,
-//                         fontWeight: FontWeight.bold,
-//                         letterSpacing: 1.1,
-//                       ),
-//                     ),
-//                     const Text(
-//                       "Join the Helping hands NGO mission",
-//                       style: TextStyle(color: Colors.white70, fontSize: 14),
-//                     ),
-//                     const SizedBox(height: 30),
-//
-//                     // 3. REGISTRATION CARD
-//                     Container(
-//                       padding: const EdgeInsets.all(24),
-//                       decoration: BoxDecoration(
-//                         color: Colors.white,
-//                         borderRadius: BorderRadius.circular(30),
-//                         boxShadow: [
-//                           BoxShadow(
-//                             color: Colors.black.withOpacity(0.1),
-//                             blurRadius: 20,
-//                             offset: const Offset(0, 10),
-//                           ),
-//                         ],
-//                       ),
-//                       child: Form(
-//                         key: formKey,
-//                         child: Column(
-//                           children: [
-//                             // NAME FIELD
-//                             _buildInputField(
-//                               controller: controller.nameController,
-//                               label: "Full Name",
-//                               icon: Icons.person_outline,
-//                               validator: (v) =>
-//                                   v!.isEmpty ? "Enter your name" : null,
-//                             ),
-//                             const SizedBox(height: 18),
-//
-//                             // EMAIL FIELD
-//                             _buildInputField(
-//                               controller: controller.emailController,
-//                               label: "Email",
-//                               icon: Icons.email_outlined,
-//                               validator: (v) => !v!.contains('@')
-//                                   ? "Enter a valid email"
-//                                   : null,
-//                             ),
-//                             const SizedBox(height: 18),
-//
-//                             // ROLE DROPDOWN
-//                             Obx(
-//                               () => DropdownButtonFormField<String>(
-//                                 value: controller.selectedRole.value,
-//                                 decoration: _inputDecoration(
-//                                   "Select Role",
-//                                   Icons.assignment_ind_outlined,
-//                                 ),
-//                                 items: controller.roles.map((String role) {
-//                                   return DropdownMenuItem(
-//                                     value: role,
-//                                     child: Text(role),
-//                                   );
-//                                 }).toList(),
-//                                 onChanged: (val) =>
-//                                     controller.setSelectedRole(val),
-//                               ),
-//                             ),
-//                             const SizedBox(height: 18),
-//
-//                             // PASSWORD FIELD
-//                             Obx(
-//                               () => _buildInputField(
-//                                 controller: controller.passwordController,
-//                                 label: "Password",
-//                                 icon: Icons.lock_outline,
-//                                 isPassword: true,
-//                                 obscureText:
-//                                     !controller.isPasswordVisible.value,
-//                                 toggleIcon: () =>
-//                                     controller.isPasswordVisible.toggle(),
-//                                 validator: (v) => v!.length < 6
-//                                     ? "Minimum 6 characters"
-//                                     : null,
-//                               ),
-//                             ),
-//                             const SizedBox(height: 18),
-//
-//                             // CONFIRM PASSWORD FIELD
-//                             Obx(
-//                               () => _buildInputField(
-//                                 label: "Confirm Password",
-//                                 icon: Icons.lock_reset_outlined,
-//                                 isPassword: true,
-//                                 obscureText:
-//                                     !controller.isConfirmPasswordVisible.value,
-//                                 toggleIcon: () => controller
-//                                     .isConfirmPasswordVisible
-//                                     .toggle(),
-//                                 validator: (v) =>
-//                                     v != controller.passwordController.text
-//                                     ? "Passwords don't match"
-//                                     : null,
-//                               ),
-//                             ),
-//
-//                             const SizedBox(height: 30),
-//
-//                             // SIGN UP BUTTON
-//                             Obx(
-//                               () => SizedBox(
-//                                 width: double.infinity,
-//                                 height: 55,
-//                                 child: ElevatedButton(
-//                                   style: ElevatedButton.styleFrom(
-//                                     backgroundColor: const Color(0xFF2E7D32),
-//                                     shape: RoundedRectangleBorder(
-//                                       borderRadius: BorderRadius.circular(15),
-//                                     ),
-//                                     elevation: 5,
-//                                   ),
-//                                   onPressed: controller.isLoading.value
-//                                       ? null
-//                                       : () {
-//                                           if (formKey.currentState!
-//                                               .validate()) {
-//                                             controller.signup();
-//                                           }
-//                                         },
-//                                   child: controller.isLoading.value
-//                                       ? const CircularProgressIndicator(
-//                                           color: Colors.white,
-//                                         )
-//                                       : const Text(
-//                                           "SIGN UP",
-//                                           style: TextStyle(
-//                                             fontSize: 16,
-//                                             fontWeight: FontWeight.bold,
-//                                             color: Colors.white,
-//                                           ),
-//                                         ),
-//                                 ),
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-//
-//                     const SizedBox(height: 30),
-//
-//                     // GOOGLE SIGNUP
-//                     _buildGoogleButton(),
-//
-//                     const SizedBox(height: 25),
-//
-//                     // SIGN IN LINK
-//                     RichText(
-//                       text: TextSpan(
-//                         style: const TextStyle(
-//                           color: Colors.white,
-//                           fontSize: 15,
-//                         ),
-//                         children: [
-//                           const TextSpan(text: "Already have an account? "),
-//                           TextSpan(
-//                             text: "Sign In",
-//                             style: const TextStyle(
-//                               color: Colors.white,
-//                               fontWeight: FontWeight.bold,
-//                               decoration: TextDecoration.underline,
-//                             ),
-//                             recognizer: TapGestureRecognizer()
-//                               ..onTap = () => Get.to(() => SignInPage()),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                     const SizedBox(height: 40),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   // REUSABLE INPUT COMPONENT
-//   Widget _buildInputField({
-//     TextEditingController? controller,
-//     required String label,
-//     required IconData icon,
-//     bool isPassword = false,
-//     bool obscureText = false,
-//     VoidCallback? toggleIcon,
-//     String? Function(String?)? validator,
-//   }) {
-//     return TextFormField(
-//       controller: controller,
-//       obscureText: obscureText,
-//       style: const TextStyle(fontSize: 15),
-//       decoration: _inputDecoration(label, icon).copyWith(
-//         suffixIcon: isPassword
-//             ? IconButton(
-//                 icon: Icon(
-//                   obscureText ? Icons.visibility_off : Icons.visibility,
-//                   color: Colors.grey,
-//                 ),
-//                 onPressed: toggleIcon,
-//               )
-//             : null,
-//       ),
-//       validator: validator,
-//     );
-//   }
-//
-//   InputDecoration _inputDecoration(String label, IconData icon) {
-//     return InputDecoration(
-//       labelText: label,
-//       labelStyle: TextStyle(color: Colors.grey[600]),
-//       prefixIcon: Icon(icon, color: Colors.green[800], size: 22),
-//       filled: true,
-//       fillColor: Colors.grey[50],
-//       enabledBorder: OutlineInputBorder(
-//         borderRadius: BorderRadius.circular(15),
-//         borderSide: BorderSide(color: Colors.grey[200]!),
-//       ),
-//       focusedBorder: OutlineInputBorder(
-//         borderRadius: BorderRadius.circular(15),
-//         borderSide: const BorderSide(color: Color(0xFF2E7D32), width: 2),
-//       ),
-//       errorBorder: OutlineInputBorder(
-//         borderRadius: BorderRadius.circular(15),
-//         borderSide: const BorderSide(color: Colors.redAccent),
-//       ),
-//     );
-//   }
-//
-//   Widget _buildGoogleButton() {
-//     return SizedBox(
-//       width: double.infinity,
-//       height: 55,
-//       child: OutlinedButton.icon(
-//         onPressed: () => controller.googleSignup(),
-//         icon: Image.asset("assets/images/google.png", height: 24),
-//         label: const Text(
-//           "Continue with Google",
-//           style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-//         ),
-//         style: OutlinedButton.styleFrom(
-//           side: const BorderSide(color: Colors.white70),
-//           shape: RoundedRectangleBorder(
-//             borderRadius: BorderRadius.circular(15),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -332,10 +7,8 @@ import 'Sign_In_Page.dart';
 
 class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});
-
   final formKey = GlobalKey<FormState>();
   final controller = Get.put(Signupcontroller());
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -347,7 +20,6 @@ class SignUpPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20),
             child: Column(
               children: [
-                // LOGO SECTION - Now with a softer shadow
                 Container(
                   height: 100,
                   width: 100,
@@ -369,11 +41,10 @@ class SignUpPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 25),
-
                 const Text(
                   "Create Account",
                   style: TextStyle(
-                    color: Color(0xFF1B5E20), // Dark Forest Green for text
+                    color: Color(0xFF1B5E20),
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     letterSpacing: -0.5,
@@ -384,7 +55,6 @@ class SignUpPage extends StatelessWidget {
                   style: TextStyle(color: Colors.blueGrey, fontSize: 14),
                 ),
                 const SizedBox(height: 30),
-
                 // 2. THE REGISTRATION CARD
                 Container(
                   padding: const EdgeInsets.all(24),
@@ -411,7 +81,6 @@ class SignUpPage extends StatelessWidget {
                               v!.isEmpty ? "Enter your name" : null,
                         ),
                         const SizedBox(height: 18),
-
                         _buildInputField(
                           controller: controller.emailController,
                           label: "Email Address",
@@ -420,7 +89,6 @@ class SignUpPage extends StatelessWidget {
                               !v!.contains('@') ? "Enter a valid email" : null,
                         ),
                         const SizedBox(height: 18),
-
                         // ROLE DROPDOWN
                         Obx(
                           () => DropdownButtonFormField<String>(
@@ -439,7 +107,6 @@ class SignUpPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 18),
-
                         // PASSWORD
                         Obx(
                           () => _buildInputField(
@@ -455,7 +122,6 @@ class SignUpPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 18),
-
                         // CONFIRM PASSWORD
                         Obx(
                           () => _buildInputField(
@@ -472,9 +138,7 @@ class SignUpPage extends StatelessWidget {
                                 : null,
                           ),
                         ),
-
                         const SizedBox(height: 30),
-
                         // PRIMARY ACTION BUTTON
                         Obx(
                           () => SizedBox(
@@ -487,7 +151,7 @@ class SignUpPage extends StatelessWidget {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(16),
                                 ),
-                                elevation: 0, // Flat design for light theme
+                                elevation: 0,
                               ),
                               onPressed: controller.isLoading.value
                                   ? null
@@ -519,14 +183,10 @@ class SignUpPage extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 25),
-
                 // 3. GOOGLE SIGNUP (Dark Outline)
                 _buildGoogleButton(),
-
                 const SizedBox(height: 25),
-
                 // SIGN IN LINK
                 RichText(
                   text: TextSpan(
@@ -556,8 +216,6 @@ class SignUpPage extends StatelessWidget {
       ),
     );
   }
-
-  // --- REUSABLE COMPONENTS ---
 
   Widget _buildInputField({
     TextEditingController? controller,
