@@ -10,13 +10,11 @@ import 'Admin_Event_Requests.dart';
 
 class AdminEventScreen extends StatefulWidget {
   const AdminEventScreen({super.key});
-
   @override
   State<AdminEventScreen> createState() => _AdminEventScreenState();
 }
 
 class _AdminEventScreenState extends State<AdminEventScreen> {
-  // --- IMAGE PICKER UTILITY ---
   Future<String?> _pickImage() async {
     final picker = ImagePicker();
     final XFile? image = await picker.pickImage(
@@ -29,7 +27,6 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     return null;
   }
 
-  // --- LOGIC: BLUR ONLY ON THE DAY AFTER ---
   bool _isPastEvent(dynamic dateData) {
     if (dateData == null) return false;
     DateTime eventDate;
@@ -47,7 +44,6 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
       DateTime.now().month,
       DateTime.now().day,
     );
-    // Jan 28 remains Active; Jan 29 becomes Past
     return eventDate.isBefore(today);
   }
 
@@ -67,12 +63,10 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
             return const Center(
               child: CircularProgressIndicator(color: Colors.green),
             );
-
           final docs = snapshot.data!.docs;
           int activeCount = docs
               .where((doc) => !_isPastEvent(doc['event_date_timestamp']))
               .length;
-
           return CustomScrollView(
             physics: const BouncingScrollPhysics(),
             slivers: [
@@ -80,7 +74,6 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
               SliverToBoxAdapter(
                 child: _buildDashboardHeader(docs.length, activeCount),
               ),
-
               // 2. EVENTS LIST
               docs.isEmpty
                   ? const SliverFillRemaining(
@@ -121,14 +114,8 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
 
   Widget _buildDashboardHeader(int total, int active) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(
-        20,
-        40,
-        20,
-        40,
-      ), // Increased vertical padding for better focus
+      padding: const EdgeInsets.fromLTRB(20, 40, 20, 40),
       decoration: BoxDecoration(),
-
       child: Row(
         children: [
           // 1. TOTAL PORTFOLIO CARD
@@ -138,9 +125,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
             Icons.inventory_2_outlined,
             Colors.blueAccent,
           ),
-
           const SizedBox(width: 15),
-
           // 2. CURRENTLY ACTIVE CARD
           _headerStatCard(
             "Currently Active",
@@ -153,7 +138,6 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     );
   }
 
-  // Updated helper to support custom accent colors for the icons
   Widget _headerStatCard(
     String title,
     String count,
@@ -164,7 +148,7 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
         decoration: BoxDecoration(
-          color: Colors.green[800], // Glassmorphism effect
+          color: Colors.green[800],
           borderRadius: BorderRadius.circular(24),
           border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
         ),
@@ -198,7 +182,6 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     );
   }
 
-  // --- UI: MODERN EVENT CARD ---
   Widget _buildModernEventCard(
     String docId,
     Map<String, dynamic> data,
@@ -384,8 +367,6 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     );
   }
 
-  // --- CRUD HELPERS ---
-
   void _showDeleteConfirmation(String docId) {
     showDialog(
       context: context,
@@ -424,7 +405,6 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     final date = TextEditingController();
     DateTime? selectedDate;
     String? base64Image;
-
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -557,7 +537,6 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     String docId,
     Map<String, dynamic> data,
   ) {
-    // Implement similar UI to Add dialog but with existing values
     final title = TextEditingController(text: data['event_title']);
     final desc = TextEditingController(text: data['description']);
     final loc = TextEditingController(text: data['location']);
@@ -565,7 +544,6 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
     DateTime selectedDate = (data['event_date_timestamp'] as Timestamp)
         .toDate();
     String? base64Image = data['image'];
-
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
