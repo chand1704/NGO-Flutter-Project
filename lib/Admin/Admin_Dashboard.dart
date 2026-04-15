@@ -19,12 +19,10 @@ class AdminNavController extends GetxController {
 
 class AdminDashboard extends StatelessWidget {
   const AdminDashboard({super.key});
-
   @override
   Widget build(BuildContext context) {
     final navController = Get.put(AdminNavController());
     final String? uid = FirebaseAuth.instance.currentUser?.uid;
-
     final List<Widget> screens = [
       const AdminHomeScreen(),
       const UserManagementScreen(),
@@ -32,9 +30,8 @@ class AdminDashboard extends StatelessWidget {
       const AdminCategoryScreen(),
       const AdminEventScreen(),
     ];
-
     return Scaffold(
-      backgroundColor: Colors.grey[50], // Soft background for the whole app
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: Obx(() {
           switch (navController.currentIndex.value) {
@@ -71,9 +68,6 @@ class AdminDashboard extends StatelessWidget {
         foregroundColor: Colors.white,
         centerTitle: true,
         elevation: 0,
-        // shape: const RoundedRectangleBorder(
-        //   borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-        // ),
       ),
       drawer: _buildModernDrawer(context, uid, navController),
       body: Obx(
@@ -86,7 +80,6 @@ class AdminDashboard extends StatelessWidget {
     );
   }
 
-  // --- MODERN DRAWER ---
   Widget _buildModernDrawer(
     BuildContext context,
     String? uid,
@@ -138,12 +131,10 @@ class AdminDashboard extends StatelessWidget {
                   4,
                   navController,
                 ),
-
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 20),
                   child: Divider(),
                 ),
-
                 ListTile(
                   onTap: () async {
                     await AuthService().signOut();
@@ -187,7 +178,6 @@ class AdminDashboard extends StatelessWidget {
     );
   }
 
-  // --- DRAWER HEADER ---
   Widget _buildDrawerHeader(String? uid) {
     return FutureBuilder<DocumentSnapshot>(
       future: FirebaseFirestore.instance.collection('users').doc(uid).get(),
@@ -241,7 +231,6 @@ class AdminDashboard extends StatelessWidget {
     );
   }
 
-  // --- DRAWER ITEM ---
   Widget _buildDrawerItem(
     IconData icon,
     String title,
@@ -278,7 +267,6 @@ class AdminDashboard extends StatelessWidget {
     });
   }
 
-  // --- BOTTOM NAV BAR ---
   Widget _buildBottomNav(AdminNavController navController) {
     return Obx(
       () => Container(
