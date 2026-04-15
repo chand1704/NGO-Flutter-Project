@@ -8,7 +8,6 @@ import 'package:ngo_project/Volunteer/vol_home.dart';
 
 class Root extends StatelessWidget {
   const Root({super.key});
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
@@ -19,13 +18,10 @@ class Root extends StatelessWidget {
             body: Center(child: CircularProgressIndicator()),
           );
         }
-
         if (!snapshot.hasData || snapshot.data == null) {
           return SignInPage();
         }
-
         final User user = snapshot.data!;
-
         return FutureBuilder<DocumentSnapshot>(
           future: FirebaseFirestore.instance
               .collection('users')
@@ -37,18 +33,13 @@ class Root extends StatelessWidget {
                 body: Center(child: CircularProgressIndicator()),
               );
             }
-
             if (!roleSnapshot.hasData || !roleSnapshot.data!.exists) {
               return SignInPage();
             }
-
             final data = roleSnapshot.data!.data() as Map<String, dynamic>;
-
-            // 🔥 FIX: Added .toLowerCase() to match "volunteer" or "Volunteer"
             final String role = (data['role'] ?? 'user')
                 .toString()
                 .toLowerCase();
-
             if (role == 'admin') {
               return const AdminDashboard();
             } else if (role == 'volunteer') {
