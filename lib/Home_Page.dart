@@ -4,11 +4,10 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Required for HapticFeedback
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:ngo_project/root.dart';
 
-// Your page imports
 import 'Auto_Slider.dart';
 import 'Donate_Page.dart';
 import 'MyDonationPage.dart';
@@ -18,14 +17,12 @@ import 'service/auth_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-
   final List<String> _pageTitles = [
     "Helping Hand NGO",
     "Donate Now",
@@ -33,9 +30,7 @@ class _HomePageState extends State<HomePage> {
     "Impact History",
     "Upcoming Events",
   ];
-
   late final List<Widget> _pages;
-
   @override
   void initState() {
     super.initState();
@@ -48,10 +43,9 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
-  // UPDATED: Added Haptic Feedback and Page Transition Logic
   void _onItemTapped(int index) {
     if (_selectedIndex != index) {
-      HapticFeedback.lightImpact(); // Provides tactile feedback on tap
+      HapticFeedback.lightImpact();
       setState(() => _selectedIndex = index);
     }
   }
@@ -61,8 +55,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       extendBody: true,
       backgroundColor: const Color(0xFFFBFBFC),
-
-      // 1. IMPROVED GLASS APP BAR
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(70),
         child: ClipRRect(
@@ -72,7 +64,6 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: Colors.green.withValues(alpha: 0.75),
               elevation: 0,
               centerTitle: true,
-              // Adding a custom leading icon for the drawer
               leading: Builder(
                 builder: (context) => IconButton(
                   icon: const Icon(
@@ -117,17 +108,13 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-
       drawer: _buildPremiumDrawer(),
-
-      // UPDATED: Using AnimatedSwitcher for smooth page transitions
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 400),
         switchInCurve: Curves.easeOutCubic,
         switchOutCurve: Curves.easeInCubic,
         child: _pages[_selectedIndex],
       ),
-
       bottomNavigationBar: _buildGlassBottomBar(),
     );
   }
@@ -139,7 +126,6 @@ class _HomePageState extends State<HomePage> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Glass Layer with enhanced shadow
           Positioned.fill(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(35),
@@ -165,7 +151,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -205,7 +190,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SizedBox(height: 4),
-          // Improved Pill Indicator
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             height: 4,
@@ -222,7 +206,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // --- DRAWER REDESIGN ---
   Widget _buildPremiumDrawer() {
     final User user = FirebaseAuth.instance.currentUser!;
     return Drawer(
@@ -378,18 +361,14 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// ---------------------------------------------------------------------------------------------
-// --- 1. IMPACT METRIC MODEL ---
 class ImpactMetric {
   final String label;
   final String value;
   final IconData icon;
   final Color color;
-
   ImpactMetric(this.label, this.value, this.icon, this.color);
 }
 
-// --- 2. YOUR CATEGORY MODEL ---
 class CategoryModel {
   final String id;
   final String title;
@@ -397,7 +376,6 @@ class CategoryModel {
   final IconData icon;
   final String fallbackImage;
   final List<dynamic> items;
-
   CategoryModel({
     required this.id,
     required this.title,
@@ -406,7 +384,6 @@ class CategoryModel {
     required this.fallbackImage,
     this.items = const [],
   });
-
   factory CategoryModel.fromFirestore(Map<String, dynamic> data, String docId) {
     final meta = _getLocalMetadata(docId);
     return CategoryModel(
@@ -418,7 +395,6 @@ class CategoryModel {
       fallbackImage: meta['imagePath'],
     );
   }
-
   static Map<String, dynamic> _getLocalMetadata(String id) {
     final Map<String, Map<String, dynamic>> metaMap = {
       "old_age": {
@@ -435,20 +411,15 @@ class CategoryModel {
 
 class HomeContent extends StatelessWidget {
   final VoidCallback onDonateTap;
-
-  // Real-world metric data for user engagement
   final List<ImpactMetric> metrics = [
     ImpactMetric("Lives Saved", "15k+", Icons.favorite, Colors.redAccent),
     ImpactMetric("Kids Taught", "4.2k", Icons.school, Colors.blue),
     ImpactMetric("Meals Served", "50k+", Icons.restaurant, Colors.orange),
   ];
-
   HomeContent({super.key, required this.onDonateTap});
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      // BouncingScrollPhysics provides a premium "elastic" feel
       physics: const BouncingScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -462,7 +433,6 @@ class HomeContent extends StatelessWidget {
                 // 1. DYNAMIC HEADER SLIDER
                 const AutoSlider(),
                 const SizedBox(height: 25),
-
                 // 2. REAL-TIME IMPACT SECTION
                 const _SectionTitle(title: "Our Real-Time Impact"),
                 const SizedBox(height: 15),
@@ -476,9 +446,7 @@ class HomeContent extends StatelessWidget {
                         _buildImpactCard(metrics[index]),
                   ),
                 ),
-
                 const SizedBox(height: 30),
-
                 // 3. CAUSES STREAM SECTION
                 const _SectionTitle(title: "Support a Cause"),
                 const SizedBox(height: 15),
@@ -492,9 +460,7 @@ class HomeContent extends StatelessWidget {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     }
-
                     final docs = snapshot.data!.docs;
-
                     return SizedBox(
                       height: 220,
                       child: ListView.builder(
@@ -503,12 +469,10 @@ class HomeContent extends StatelessWidget {
                         itemCount: docs.length,
                         itemBuilder: (context, index) {
                           final doc = docs[index];
-                          // Utilizing the model for structured data
                           final category = CategoryModel.fromFirestore(
                             doc.data() as Map<String, dynamic>,
                             doc.id,
                           );
-
                           return Padding(
                             padding: const EdgeInsets.only(right: 15),
                             child: SizedBox(
@@ -530,7 +494,6 @@ class HomeContent extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 30),
-
                 // 4. ACTION TILES
                 Row(
                   children: [
@@ -553,9 +516,6 @@ class HomeContent extends StatelessWidget {
                     ),
                   ],
                 ),
-
-                // 🔥 THE FIX: Added 120px space at the bottom to ensure
-                // content scrolls past the floating bottom nav bar.
                 const SizedBox(height: 120),
               ],
             ),
@@ -564,8 +524,6 @@ class HomeContent extends StatelessWidget {
       ),
     );
   }
-
-  // --- PREMIUM COMPONENT BUILDERS ---
 
   Widget _buildFeaturedActionCard(
     BuildContext context, {
@@ -660,7 +618,7 @@ class HomeContent extends StatelessWidget {
   }
 
   void _showVolunteerSnackbar(BuildContext context) {
-    HapticFeedback.heavyImpact(); // Tactile confirmation
+    HapticFeedback.heavyImpact();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: const Text(
@@ -671,23 +629,12 @@ class HomeContent extends StatelessWidget {
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.indigo.shade900,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        margin: const EdgeInsets.fromLTRB(
-          20,
-          0,
-          20,
-          110,
-        ), // Positioned above bottom bar
-        // action: SnackBarAction(
-        //   label: "JOIN",
-        //   textColor: Colors.orangeAccent,
-        //   onPressed: () => debugPrint("Join clicked"),
-        // ),
+        margin: const EdgeInsets.fromLTRB(20, 0, 20, 110),
       ),
     );
   }
 }
 
-// Reusable Section Title with modern typography
 class _SectionTitle extends StatelessWidget {
   final String title;
   const _SectionTitle({required this.title});
@@ -713,7 +660,6 @@ class _ActionTile extends StatelessWidget {
     required this.color,
     required this.onTap,
   });
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
