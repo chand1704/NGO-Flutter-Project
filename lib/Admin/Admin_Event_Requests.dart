@@ -17,7 +17,6 @@ class AdminEventRequests extends StatelessWidget {
           .collection('volunteer_requests')
           .doc(customDocId)
           .update({'status': status});
-
       Get.snackbar(
         "Decision Recorded",
         "Volunteer status moved to ${status.toUpperCase()}",
