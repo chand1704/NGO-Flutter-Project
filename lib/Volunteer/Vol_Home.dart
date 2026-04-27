@@ -446,19 +446,52 @@ class VolunteerDashboard extends StatelessWidget {
           .where('volunteer_id', isEqualTo: uid)
           .snapshots(),
       builder: (context, snapshot) {
-        int count = snapshot.data?.docs.length ?? 0;
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Row(
+            children: [
+              _buildStatCard(
+                "Active Applications",
+                "...",
+                Colors.orange,
+                Icons.assignment_turned_in,
+              ),
+              const SizedBox(width: 15),
+              _buildStatCard(
+                "Impact Points",
+                "...",
+                Colors.blueAccent,
+                Icons.auto_awesome,
+              ),
+            ],
+          );
+        }
+
+        final docs = snapshot.data?.docs ?? [];
+
+        // Logic: Active = Pending OR Approved (not rejected)
+        int activeCount = docs.where((doc) {
+          String status = (doc['status'] ?? "pending").toString().toLowerCase();
+          return status == 'pending' || status == 'approved';
+        }).length;
+
+        // Logic: Impact points only from Approved applications
+        int approvedCount = docs.where((doc) {
+          return (doc['status'] ?? "").toString().toLowerCase() == 'approved';
+        }).length;
+        int impactPoints = approvedCount * 100;
+
         return Row(
           children: [
             _buildStatCard(
               "Active Applications",
-              "$count",
+              "$activeCount",
               Colors.orange,
               Icons.assignment_turned_in,
             ),
             const SizedBox(width: 15),
             _buildStatCard(
               "Impact Points",
-              "${count * 50}",
+              "$impactPoints",
               Colors.blueAccent,
               Icons.auto_awesome,
             ),
