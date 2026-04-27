@@ -240,11 +240,15 @@ class _AdminEventScreenState extends State<AdminEventScreen> {
                           color: Colors.green,
                         ),
                         const SizedBox(width: 4),
-                        Text(
-                          data['location'] ?? "NGO Center",
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 13,
+                        Expanded(
+                          child: Text(
+                            data['location'] ?? "NGO Center",
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 13,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         const SizedBox(width: 15),
