@@ -256,9 +256,13 @@ class _VolEventsPageState extends State<VolEventsPage> {
                         color: Colors.green,
                       ),
                       const SizedBox(width: 5),
-                      Text(
-                        data['location'] ?? "Main Center",
-                        style: TextStyle(color: Colors.grey[600]),
+                      Expanded(
+                        child: Text(
+                          data['location'] ?? "Main Center",
+                          style: TextStyle(color: Colors.grey[600]),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
                       ),
                     ],
                   ),

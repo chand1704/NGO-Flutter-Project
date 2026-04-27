@@ -130,9 +130,11 @@ class UserEvent extends StatelessWidget {
                               ).format(data['event_date_timestamp'].toDate()),
                         ),
                         const SizedBox(width: 15),
-                        _buildInfoChip(
-                          Icons.location_on_rounded,
-                          data['location'] ?? "Main Center",
+                        Expanded(
+                          child: _buildInfoChip(
+                            Icons.location_on_rounded,
+                            data['location'] ?? "Main Center",
+                          ),
                         ),
                       ],
                     ),
@@ -220,12 +222,16 @@ class UserEvent extends StatelessWidget {
       children: [
         Icon(icon, size: 16, color: Colors.green.shade700),
         const SizedBox(width: 6),
-        Text(
-          text,
-          style: TextStyle(
-            color: Colors.grey.shade600,
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
+        Flexible(
+          child: Text(
+            text,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: TextStyle(
+              color: Colors.grey.shade600,
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ],
