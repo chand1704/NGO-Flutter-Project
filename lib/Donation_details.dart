@@ -110,12 +110,15 @@ class DonationDetailsPage extends StatelessWidget {
                           fontSize: 14,
                         ),
                       ),
-                      Text(
-                        targetArea,
-                        style: const TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 14,
+                      Expanded(
+                        child: Text(
+                          targetArea,
+                          style: const TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 14,
+                          ),
+                          overflow: TextOverflow.visible,
                         ),
                       ),
                     ],
