@@ -337,9 +337,11 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                   ),
                   child: CircleAvatar(
                     backgroundColor: Colors.grey[100],
-                    backgroundImage:
-                        (profileImg != null && profileImg.isNotEmpty)
-                        ? MemoryImage(base64Decode(profileImg))
+                    backgroundImage: (profileImg != null && profileImg.isNotEmpty)
+                        ? (profileImg.startsWith('http')
+                            ? NetworkImage(profileImg)
+                            : MemoryImage(base64Decode(profileImg))
+                                as ImageProvider)
                         : null,
                     child: (profileImg == null || profileImg.isEmpty)
                         ? Text(

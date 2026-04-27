@@ -134,7 +134,11 @@ class _VolHomeState extends State<VolHome> {
                           backgroundColor: Colors.white,
                           backgroundImage:
                               (profileImage != null && profileImage.isNotEmpty)
-                              ? MemoryImage(base64Decode(profileImage.trim()))
+                              ? (profileImage.startsWith('http')
+                                  ? NetworkImage(profileImage)
+                                  : MemoryImage(
+                                      base64Decode(profileImage.trim()),
+                                    ) as ImageProvider)
                               : null,
                           child: (profileImage == null || profileImage.isEmpty)
                               ? const Icon(

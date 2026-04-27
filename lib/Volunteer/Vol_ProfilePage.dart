@@ -254,7 +254,10 @@ class _VolProfilePageState extends State<VolProfilePage> {
               backgroundColor: Colors.grey.shade200,
               // Check if base64String is valid and not empty
               backgroundImage: (base64String != null && base64String.isNotEmpty)
-                  ? MemoryImage(base64Decode(base64String))
+                  ? (base64String.startsWith('http')
+                      ? NetworkImage(base64String)
+                      : MemoryImage(base64Decode(base64String))
+                          as ImageProvider)
                   : null,
               // Show person icon only if no image is present
               child: (base64String == null || base64String.isEmpty)
