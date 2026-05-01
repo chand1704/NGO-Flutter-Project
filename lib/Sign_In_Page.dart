@@ -162,7 +162,9 @@ class SignInPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 35),
+                const SizedBox(height: 20),
+                _buildGoogleButton(),
+                const SizedBox(height: 20),
                 // 3. SIGN UP LINK - DARK CONTRAST
                 RichText(
                   text: TextSpan(
@@ -184,10 +186,42 @@ class SignInPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGoogleButton() {
+    return SizedBox(
+      width: double.infinity,
+      height: 55,
+      child: OutlinedButton.icon(
+        onPressed: () {
+          Get.snackbar(
+            "Coming Soon",
+            "Google Sign-In functionality will be implemented soon!",
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.white70,
+          );
+        },
+        icon: Image.asset("assets/images/google.png", height: 24),
+        label: const Text(
+          "Continue with Google",
+          style: TextStyle(
+            color: Color(0xFF1B5E20),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: Color(0xFFCFD8DC)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          backgroundColor: Colors.white,
         ),
       ),
     );

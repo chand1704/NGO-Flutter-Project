@@ -275,7 +275,14 @@ class SignUpPage extends StatelessWidget {
       width: double.infinity,
       height: 55,
       child: OutlinedButton.icon(
-        onPressed: () => controller.googleSignup(),
+        onPressed: () {
+          Get.snackbar(
+            "Coming Soon",
+            "Google Sign-Up functionality will be implemented soon!",
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.white70,
+          );
+        },
         icon: Image.asset("assets/images/google.png", height: 24),
         label: const Text(
           "Continue with Google",
